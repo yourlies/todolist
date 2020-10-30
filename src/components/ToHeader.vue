@@ -20,5 +20,6 @@
 .header > span.foot {
   background-color: #f90;
   color: #000;
+  box-shadow: 2px 2px 8px #111;
 }
 </style>
