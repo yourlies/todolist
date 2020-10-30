@@ -62,13 +62,22 @@ export default class Home extends Vue {
   position: relative;
   background-color: #333;
   box-shadow: 1px 1px 3px #888;
-  padding: 15px;
+  height: 40px;
   padding-left: 20px;
   margin-top: 10px;
   border-radius: 3px;
   color: #fff;
 }
 .name {
+  position: absolute;
+  height: 40px;
+  background-color: #7c0403;
+  display: flex;
+  align-items: center;
+  width: 150px;
+  left: 0;
+  border-radius: 3px;
+  padding-left: 20px;
 }
 .title .date {
   position: absolute;
