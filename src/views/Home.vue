@@ -71,10 +71,10 @@ export default class Home extends Vue {
 .name {
   position: absolute;
   height: 40px;
-  background-color: #7c0403;
+  background: linear-gradient(to right, #7c0403, #333);
   display: flex;
   align-items: center;
-  width: 150px;
+  width: 180px;
   left: 0;
   border-radius: 3px;
   padding-left: 20px;
