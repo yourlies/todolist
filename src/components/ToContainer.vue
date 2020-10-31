@@ -13,4 +13,12 @@
 .ac {
   align-items: center;
 }
+.full-screen {
+  position: absolute;
+  width: 100vw;
+  height: 85vh;
+  overflow: hidden;
+  left: 0;
+  right: 0;
+}
 </style>

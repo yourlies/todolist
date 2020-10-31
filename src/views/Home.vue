@@ -1,8 +1,8 @@
 <template>
-  <ToContainer class="container">
+  <ToContainer class="container full-screen" @click="onclick">
     <ToHeader />
     <div class="home">
-      <div class="comment">“双击新增计划”</div>
+      <div class="comment">“双击新增计划，左右滑动切换任务类型”</div>
       <div class="comment">“拖动计划，可重新分组”</div>
       <div class="title df ac">
         <span class="name">紧急危机任务</span>
@@ -31,25 +31,40 @@
           <div class="f1 text">asd</div>
         </li>
       </ul>
+      <div>{{ test }}</div>
     </div>
   </ToContainer>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import ToContainer from '@/components/ToContainer.vue';
-import ToHeader from '@/components/ToHeader.vue';
+import { Options, Vue } from 'vue-class-component'
+import ToContainer from '@/components/ToContainer.vue'
+import ToHeader from '@/components/ToHeader.vue'
+import { TypeStorage } from '../mock/index'
+import { Item } from '../interface/index'
+import { MTouch } from '../touch/index'
 
+const storage = new TypeStorage<{ todoItems: [Item] }>()
 @Options({
   components: { ToHeader, ToContainer },
 })
 export default class Home extends Vue {
-  name = 123;
+  test = ''
+  onclick(event: Event) {
+    if (MTouch.double(event)) {
+      this.test = '双击'
+    } else {
+      this.test = '单击'
+    }
+  }
+  mounted() {
+    // storage.updateItem('todoItems', [{ index: 12 }])
+  }
 }
 </script>
 <style scoped>
 .container {
-  background: linear-gradient(#ccc, #fff);
+  background: linear-gradient(#ccc, 5vh, #fff);
 }
 .home {
   padding: 1vw;
@@ -127,6 +142,8 @@ export default class Home extends Vue {
 }
 .item > .text {
   background-color: #ddd;
+  border: 1px solid #d9d9d9;
+  box-shadow: 2px 2px 2px #e0e0e0;
   padding: 10px;
   border-radius: 5px;
   color: #333;
