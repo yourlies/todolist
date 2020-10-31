@@ -3,39 +3,56 @@
     <div class="content">
       <div class="shadow"></div>
       <div class="name df ac">
-        <input class="f1" type="text" placeholder="name" />
+        <input v-model="name" class="f1" type="text" placeholder="name" />
       </div>
       <div class="text df ac">
-        <input class="f1" type="text" placeholder="text" />
+        <input v-model="text" class="f1" type="text" placeholder="text" />
       </div>
       <div class="date df ac">
         <div class="df ac">
-          <span>Month:</span>
-          <input type="number" />
+          <span>Mon/Day:</span>
+          <input v-model="date" type="number" />
         </div>
         <div class="df ac">
-          <span>day:</span>
-          <input type="number" />
+          <span>Hours:</span>
+          <input v-model="hours" type="number" />
         </div>
       </div>
       <div class="type">
-        <span class="select">日期</span>
-        <span>一般</span>
-        <span>紧急</span>
+        <span :class="type === 'date' ? 'select' : ''" @click="type = 'date'">
+          日期
+        </span>
+        <span :class="type === 'normal' ? 'select' : ''" @click="type = 'normal'">
+          一般
+        </span>
+        <span :class="type === 'important' ? 'select' : ''" @click="type = 'important'">
+          紧急
+        </span>
       </div>
-      <div class="submit"><span>新建任务</span></div>
+      <div class="submit" @click="submit"><span>新建任务</span></div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { Vue } from 'vue-class-component'
-
+import { Options, Vue } from 'vue-class-component'
+@Options({
+  emits: ['insert'],
+})
 export default class Insert extends Vue {
   name = ''
   text = ''
-  month = ''
-  day = ''
-  type = ''
+  date = ''
+  hours = ''
+  type = 'date'
+  submit() {
+    this.$emit('insert', {
+      name: this.name,
+      text: this.text,
+      date: this.date,
+      hours: this.hours,
+      type: this.type,
+    })
+  }
 }
 </script>
 <style scoped>

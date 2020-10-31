@@ -32,7 +32,7 @@
         </li>
       </ul>
     </div>
-    <ToInsert />
+    <ToInsert @insert="insertItem" />
   </ToContainer>
 </template>
 
@@ -57,6 +57,10 @@ export default class Home extends Vue {
     } else {
       this.test = '单击'
     }
+  }
+  insertItem(item: Item) {
+    console.log(item)
+    return true
   }
   mounted() {
     storage.updateItem('todoItems', [
