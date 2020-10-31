@@ -31,8 +31,8 @@
           <div class="f1 text">asd</div>
         </li>
       </ul>
-      <div>{{ test }}</div>
     </div>
+    <ToInsert />
   </ToContainer>
 </template>
 
@@ -40,25 +40,34 @@
 import { Options, Vue } from 'vue-class-component'
 import ToContainer from '@/components/ToContainer.vue'
 import ToHeader from '@/components/ToHeader.vue'
+import ToInsert from '@/components/ToInsert/index.vue'
 import { TypeStorage } from '../mock/index'
 import { Item } from '../interface/index'
-import { MTouch } from '../touch/index'
+import { ToTouch } from '../touch/index'
 
-const storage = new TypeStorage<{ todoItems: [Item] }>()
+const storage = new TypeStorage<{ todoItems: [Item]; 123: 123 }>()
 @Options({
-  components: { ToHeader, ToContainer },
+  components: { ToHeader, ToContainer, ToInsert },
 })
 export default class Home extends Vue {
   test = ''
   onclick(event: Event) {
-    if (MTouch.double(event)) {
+    if (ToTouch.double(event)) {
       this.test = '双击'
     } else {
       this.test = '单击'
     }
   }
   mounted() {
-    // storage.updateItem('todoItems', [{ index: 12 }])
+    storage.updateItem('todoItems', [
+      {
+        index: 12,
+        type: 'asd',
+        text: 'asd',
+        month: 123,
+        day: 123,
+      },
+    ])
   }
 }
 </script>
