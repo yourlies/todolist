@@ -1,7 +1,13 @@
-export interface Item {
-  index: number;
+export interface InsetItem {
   text: string;
   type: string;
-  month: number;
-  day: number;
+  month: string;
+  day: string;
+  time: string;
+}
+export interface InputItem {
+  text: string;
+  type: string;
+  time: string;
+  date: string;
 }

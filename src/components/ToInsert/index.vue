@@ -6,9 +6,6 @@
         <div class="title">
           <span>新增一条任务记录</span>
         </div>
-        <div class="name df ac">
-          <input v-model="name" class="f1" type="text" placeholder="name" />
-        </div>
         <div class="text df ac">
           <input v-model="text" class="f1" type="text" placeholder="text" />
         </div>
@@ -46,14 +43,12 @@ import { Options, Vue } from 'vue-class-component'
   emits: ['insert'],
 })
 export default class Insert extends Vue {
-  name = ''
   text = ''
   date = ''
   time = ''
   type = 'date'
   submit() {
     this.$emit('insert', {
-      name: this.name,
       text: this.text,
       date: this.date,
       time: this.time,
@@ -100,9 +95,6 @@ input {
   width: 82vw;
   padding: 6px;
 }
-.input-item > .name {
-  margin-bottom: 10px;
-}
 .input-item .title {
   color: #fff;
   padding-top: 20px;
@@ -122,7 +114,6 @@ input {
 .title > span {
   margin-left: 10px;
 }
-.name > input,
 .text > input {
   color: #333;
   background-color: #ddd;
@@ -135,6 +126,7 @@ input {
 .date > div {
   color: #ddd;
   padding: 10px;
+  margin-bottom: 5px;
 }
 .date input {
   width: 70px;

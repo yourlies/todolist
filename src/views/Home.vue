@@ -18,21 +18,13 @@
         </div>
       </div>
       <ul class="items">
-        <li class="item df ac">
-          <span>1.</span>
-          <div class="f1 text">asd</div>
-        </li>
-        <li class="item df ac">
-          <span>2.</span>
-          <div class="f1 text">asd</div>
-        </li>
-        <li class="item df ac">
-          <span>3.</span>
-          <div class="f1 text">asd</div>
+        <li class="item df ac" v-for="(item, index) in todoItems" :key="index">
+          <span>{{ index + 1 }}.</span>
+          <div class="f1 text">{{ item.text }}</div>
         </li>
       </ul>
     </div>
-    <ToInsert @insert="insertItem" />
+    <ToInsert @insert="insertItem" v-if="onInsert" />
   </ToContainer>
 </template>
 
@@ -42,36 +34,38 @@ import ToContainer from '@/components/ToContainer.vue'
 import ToHeader from '@/components/ToHeader.vue'
 import ToInsert from '@/components/ToInsert/index.vue'
 import { TypeStorage } from '../mock/index'
-import { Item } from '../interface/index'
+import { InsetItem, InputItem } from '../interface/index'
 import { ToTouch } from '../touch/index'
 
-const storage = new TypeStorage<{ todoItems: [Item]; 123: 123 }>()
+const storage = new TypeStorage<{ todoItems: [InsetItem?] }>()
 @Options({
   components: { ToHeader, ToContainer, ToInsert },
 })
 export default class Home extends Vue {
-  test = ''
+  onInsert = false
+  todoItems: [InsetItem?] = []
   onclick(event: Event) {
     if (ToTouch.double(event)) {
-      this.test = '双击'
-    } else {
-      this.test = '单击'
+      this.onInsert = true
     }
   }
-  insertItem(item: Item) {
-    console.log(item)
-    return true
+  insertItem(item: InputItem) {
+    const [month, day] = item.date.split('/')
+    const inputItem = {
+      type: item.type,
+      text: item.text,
+      month,
+      day,
+      time: item.time,
+    }
+    const todoItems = storage.selectItem('todoItems') || []
+    todoItems.push(inputItem)
+    storage.updateItem('todoItems', todoItems)
+    this.todoItems = todoItems
+    this.onInsert = false
   }
   mounted() {
-    storage.updateItem('todoItems', [
-      {
-        index: 12,
-        type: 'asd',
-        text: 'asd',
-        month: 123,
-        day: 123,
-      },
-    ])
+    this.todoItems = storage.selectItem('todoItems') || []
   }
 }
 </script>
