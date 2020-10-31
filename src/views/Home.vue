@@ -5,14 +5,14 @@
       <div class="comment">“双击新增计划，左右滑动切换任务类型”</div>
       <div class="comment">“拖动计划，可重新分组”</div>
       <div class="title df ac">
-        <span class="name">紧急危机任务</span>
+        <span class="name">日常普通任务</span>
         <div class="date df">
           <div class="item month">
-            <div class="value">34</div>
+            <div class="value">{{ month }}</div>
             <div class="key">MONTH</div>
           </div>
           <div class="item day">
-            <div class="value">34</div>
+            <div class="value">{{ day }}</div>
             <div class="key">DAYS</div>
           </div>
         </div>
@@ -20,11 +20,13 @@
       <ul class="items">
         <li class="item df ac" v-for="(item, index) in todoItems" :key="index">
           <span>{{ index + 1 }}.</span>
-          <div class="f1 text">{{ item.text }}</div>
+          <div class="f1 text" @touchstart="complete('down', item)" @touchend="complete('up', item)">
+            {{ item.text }}
+          </div>
         </li>
       </ul>
     </div>
-    <ToInsert @insert="insertItem" v-if="onInsert" />
+    <ToInsert @insert="insertItem" @close="closeLayer" v-if="onInsert" />
   </ToContainer>
 </template>
 
@@ -38,15 +40,33 @@ import { InsetItem, InputItem } from '../interface/index'
 import { ToTouch } from '../touch/index'
 
 const storage = new TypeStorage<{ todoItems: [InsetItem?] }>()
+const date = new Date()
 @Options({
   components: { ToHeader, ToContainer, ToInsert },
 })
 export default class Home extends Vue {
   onInsert = false
+  onPrevent = false
   todoItems: [InsetItem?] = []
+  month = date.getMonth() + 1
+  day = date.getDate()
+  timeStamp = 0
   onclick(event: Event) {
+    if (this.onPrevent) {
+      this.onPrevent = false
+      return false
+    }
+    if (this.onInsert) {
+      return false
+    }
     if (ToTouch.double(event)) {
       this.onInsert = true
+    }
+  }
+  closeLayer() {
+    if (this.onInsert) {
+      this.onInsert = false
+      this.onPrevent = true
     }
   }
   insertItem(item: InputItem) {
@@ -57,12 +77,24 @@ export default class Home extends Vue {
       month,
       day,
       time: item.time,
+      complete: false,
     }
     const todoItems = storage.selectItem('todoItems') || []
     todoItems.push(inputItem)
     storage.updateItem('todoItems', todoItems)
     this.todoItems = todoItems
     this.onInsert = false
+  }
+  complete(status: 'up' | 'down', item: InsetItem) {
+    console.log(status)
+    const timeStamp = new Date().getTime()
+    if (status === 'down') {
+      this.timeStamp = timeStamp
+    }
+    if (status === 'up' && timeStamp - this.timeStamp > 1000) {
+      item.complete = true
+      storage.updateItem('todoItems', this.todoItems)
+    }
   }
   mounted() {
     this.todoItems = storage.selectItem('todoItems') || []

@@ -1,6 +1,6 @@
 <template>
   <div class="to-insert">
-    <div class="shadow"></div>
+    <div class="shadow" @click="close"></div>
     <div class="content">
       <div class="input-item">
         <div class="title">
@@ -38,22 +38,34 @@
   </div>
 </template>
 <script lang="ts">
+import { InputItem } from '@/interface'
 import { Options, Vue } from 'vue-class-component'
+import validate from './validate'
+const date = new Date()
 @Options({
-  emits: ['insert'],
+  emits: ['insert', 'close'],
 })
 export default class Insert extends Vue {
   text = ''
-  date = ''
-  time = ''
+  date = `${date.getMonth() + 1}/${date.getDate()}`
+  time = `${date.getHours()}:${date.getMinutes()}`
   type = 'date'
+  close() {
+    this.$emit('close')
+  }
   submit() {
-    this.$emit('insert', {
+    if (!this.text) {
+      return false
+    }
+    const inputItem: InputItem = {
       text: this.text,
       date: this.date,
       time: this.time,
       type: this.type,
-    })
+    }
+    if (validate(inputItem)) {
+      this.$emit('insert', inputItem)
+    }
   }
 }
 </script>

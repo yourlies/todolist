@@ -4,6 +4,7 @@ export interface InsetItem {
   month: string;
   day: string;
   time: string;
+  complete: boolean;
 }
 export interface InputItem {
   text: string;
