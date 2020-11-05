@@ -1,5 +1,5 @@
 import { InsetItem } from "@/interface";
-import { request } from "./lib";
+import { request } from "./issue";
 
 export const getIssues = async function () {
   return request({
