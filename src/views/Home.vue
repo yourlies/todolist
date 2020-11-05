@@ -31,46 +31,47 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component'
-import ToContainer from '@/components/ToContainer.vue'
-import ToHeader from '@/components/ToHeader.vue'
-import ToInsert from '@/components/ToInsert/index.vue'
-import { TypeStorage } from '../mock/index'
-import { InsetItem, InputItem } from '../interface/index'
-import { ToTouch } from '../touch/index'
+import { Options, Vue } from 'vue-class-component';
+import ToContainer from '@/components/ToContainer.vue';
+import ToHeader from '@/components/ToHeader.vue';
+import ToInsert from '@/components/ToInsert/index.vue';
+import { TypeStorage } from '../mock/index';
+import { InsetItem, InputItem } from '../interface/index';
+import { ToTouch } from '../touch/index';
+import { createIssue, getIssues } from '@/api';
 
-const storage = new TypeStorage<{ todoItems: [InsetItem?] }>()
-const date = new Date()
+const storage = new TypeStorage<{ todoItems: [InsetItem?] }>();
+const date = new Date();
 @Options({
   components: { ToHeader, ToContainer, ToInsert },
 })
 export default class Home extends Vue {
-  onInsert = false
-  onPrevent = false
-  todoItems: [InsetItem?] = []
-  month = date.getMonth() + 1
-  day = date.getDate()
-  timeStamp = 0
+  onInsert = false;
+  onPrevent = false;
+  todoItems: [InsetItem?] = [];
+  month = date.getMonth() + 1;
+  day = date.getDate();
+  timeStamp = 0;
   onclick(event: Event) {
     if (this.onPrevent) {
-      this.onPrevent = false
-      return false
+      this.onPrevent = false;
+      return false;
     }
     if (this.onInsert) {
-      return false
+      return false;
     }
     if (ToTouch.double(event)) {
-      this.onInsert = true
+      this.onInsert = true;
     }
   }
   closeLayer() {
     if (this.onInsert) {
-      this.onInsert = false
-      this.onPrevent = true
+      this.onInsert = false;
+      this.onPrevent = true;
     }
   }
   insertItem(item: InputItem) {
-    const [month, day] = item.date.split('/')
+    const [month, day] = item.date.split('/');
     const inputItem = {
       type: item.type,
       text: item.text,
@@ -78,26 +79,32 @@ export default class Home extends Vue {
       day,
       time: item.time,
       complete: false,
-    }
-    const todoItems = storage.selectItem('todoItems') || []
-    todoItems.push(inputItem)
-    storage.updateItem('todoItems', todoItems)
-    this.todoItems = todoItems
-    this.onInsert = false
+    };
+    const todoItems = storage.selectItem('todoItems') || [];
+    todoItems.push(inputItem);
+    storage.updateItem('todoItems', todoItems);
+    createIssue(inputItem);
+    this.todoItems = todoItems;
+    this.onInsert = false;
   }
   complete(status: 'up' | 'down', item: InsetItem) {
-    console.log(status)
-    const timeStamp = new Date().getTime()
+    const timeStamp = new Date().getTime();
     if (status === 'down') {
-      this.timeStamp = timeStamp
+      this.timeStamp = timeStamp;
     }
     if (status === 'up' && timeStamp - this.timeStamp > 1000) {
-      item.complete = true
-      storage.updateItem('todoItems', this.todoItems)
+      item.complete = true;
+      storage.updateItem('todoItems', this.todoItems);
     }
   }
   mounted() {
-    this.todoItems = storage.selectItem('todoItems') || []
+    getIssues().then((res) => {
+      const issues = res.data;
+      for (let i = 0; i < issues.length; i++) {
+        const { title, body } = issues[i];
+        console.log(title, body);
+      }
+    });
   }
 }
 </script>

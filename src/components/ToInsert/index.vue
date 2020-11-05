@@ -38,34 +38,39 @@
   </div>
 </template>
 <script lang="ts">
-import { InputItem } from '@/interface'
-import { Options, Vue } from 'vue-class-component'
-import validate from './validate'
-const date = new Date()
+import { InputItem } from '@/interface';
+import { Options, Vue } from 'vue-class-component';
+import validate from './validate';
+import { getIssues } from '@/api/index';
+
+const date = new Date();
 @Options({
   emits: ['insert', 'close'],
 })
 export default class Insert extends Vue {
-  text = ''
-  date = `${date.getMonth() + 1}/${date.getDate()}`
-  time = `${date.getHours()}:${date.getMinutes()}`
-  type = 'date'
+  text = '';
+  date = `${date.getMonth() + 1}/${date.getDate()}`;
+  time = `${date.getHours()}:${date.getMinutes()}`;
+  type = 'date';
   close() {
-    this.$emit('close')
+    this.$emit('close');
   }
   submit() {
     if (!this.text) {
-      return false
+      return false;
     }
     const inputItem: InputItem = {
       text: this.text,
       date: this.date,
       time: this.time,
       type: this.type,
-    }
+    };
     if (validate(inputItem)) {
-      this.$emit('insert', inputItem)
+      this.$emit('insert', inputItem);
     }
+  }
+  mounted() {
+    getIssues();
   }
 }
 </script>
@@ -90,7 +95,9 @@ input {
   border: 0;
   font-size: 16px;
   background-color: #ddd;
-  box-shadow: 2px 2px 8px #888 inset;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: inset 2px 2px 8px #888;
 }
 .content {
   position: absolute;
