@@ -20,9 +20,11 @@
       <ul class="items">
         <li class="item df ac" v-for="(item, index) in todoItems" :key="index">
           <span>{{ index + 1 }}.</span>
-          <div class="f1 text" @touchstart="complete('down', item)" @touchend="complete('up', item)">
-            {{ item.text }}
-          </div>
+          <ToButtonRipple>
+            <div class="f1 text" @touchstart="complete('down', item)" @touchend="complete('up', item)">
+              {{ item.text }}
+            </div>
+          </ToButtonRipple>
         </li>
       </ul>
     </div>
@@ -35,6 +37,7 @@ import { Options, Vue } from 'vue-class-component';
 import ToContainer from '@/components/ToContainer.vue';
 import ToHeader from '@/components/ToHeader.vue';
 import ToInsert from '@/components/ToInsert/index.vue';
+import ToButtonRipple from '@/components/ToButtonRipple/index.vue';
 import { TypeStorage } from '../mock/index';
 import { InsetItem, InputItem } from '../interface/index';
 import { ToTouch } from '../touch/index';
@@ -43,7 +46,7 @@ import { createIssue, getIssues } from '@/api';
 const storage = new TypeStorage<{ todoItems: [InsetItem?] }>();
 const date = new Date();
 @Options({
-  components: { ToHeader, ToContainer, ToInsert },
+  components: { ToHeader, ToContainer, ToInsert, ToButtonRipple },
 })
 export default class Home extends Vue {
   onInsert = false;
@@ -192,7 +195,7 @@ export default class Home extends Vue {
 .item > span {
   margin-right: 10px;
 }
-.item > .text {
+.item .to-button-ripple {
   background-color: #ddd;
   border: 1px solid #d9d9d9;
   box-shadow: 2px 2px 2px #e0e0e0;
