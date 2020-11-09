@@ -80,11 +80,11 @@ export default class Home extends Vue {
       time: item.time,
       complete: false,
     };
-    const todoItems = storage.selectItem('todoItems') || [];
-    todoItems.push(inputItem);
-    storage.updateItem('todoItems', todoItems);
-    createIssue(inputItem);
-    this.todoItems = todoItems;
+    createIssue(inputItem).then((res) => {
+      if (res.status === 200) {
+        this.todoItems.push(inputItem);
+      }
+    });
     this.onInsert = false;
   }
   complete(status: 'up' | 'down', item: InsetItem) {
@@ -102,7 +102,13 @@ export default class Home extends Vue {
       const issues = res.data;
       for (let i = 0; i < issues.length; i++) {
         const { title, body } = issues[i];
-        console.log(title, body);
+        switch (title) {
+          case 'todoItem':
+            this.todoItems.push(JSON.parse(body));
+            break;
+          default:
+            break;
+        }
       }
     });
   }

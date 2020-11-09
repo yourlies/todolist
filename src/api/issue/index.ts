@@ -1,24 +1,23 @@
-export interface Issue {
-  title: string;
-  body: string;
-}
-export type IssuesResponse = [Issue] | []
-type AuthToken = {
-  TodoToken: string;
-}
+import { InsetItem } from "@/interface";
+import { request } from "./lib";
 
-import { TypeStorage } from "@/mock"
-import Axios, { AxiosPromise, AxiosRequestConfig } from "axios"
-const storage = new TypeStorage<AuthToken>()
-const token = storage.selectItem('TodoToken')
-
-const axios = Axios.create({
-  baseURL: 'https://api.github.com/repos/yourlies/todolist-issues',
-  timeout: 6000,
-  headers: {
-    Authorization: `token ${token}`
-  }
-})
-export const request = function (config: AxiosRequestConfig): AxiosPromise<IssuesResponse> {
-  return axios(config)
+export const getIssues = async function () {
+  return request({
+    url: '/issues',
+    method: 'get'
+  })
+}
+/**
+ * 
+ * @param issue 传入的issue对象，将自动被转化成json
+ */
+export const createIssue = function (issue: InsetItem) {
+  return request({
+    url: '/issues',
+    method: 'post',
+    data: {
+      title: 'todoItem',
+      body: JSON.stringify(issue)
+    }
+  })
 }

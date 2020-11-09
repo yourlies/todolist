@@ -41,7 +41,6 @@
 import { InputItem } from '@/interface';
 import { Options, Vue } from 'vue-class-component';
 import validate from './validate';
-import { getIssues } from '@/api/index';
 
 const date = new Date();
 @Options({
@@ -68,9 +67,6 @@ export default class Insert extends Vue {
     if (validate(inputItem)) {
       this.$emit('insert', inputItem);
     }
-  }
-  mounted() {
-    getIssues();
   }
 }
 </script>
