@@ -64,7 +64,9 @@ export default class Home extends Vue {
       return false;
     }
     if (ToTouch.double(event)) {
-      this.onInsert = true;
+      if ((event.target as HTMLElement).className.indexOf('full-screen') !== -1) {
+        this.onInsert = true;
+      }
     }
   }
   closeLayer() {
