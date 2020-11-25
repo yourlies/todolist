@@ -20,8 +20,8 @@
       <ul class="items">
         <li class="item df ac" v-for="(item, index) in todoItems" :key="index">
           <span>{{ index + 1 }}.</span>
-          <ToButtonRipple>
-            <div class="f1 text" @touchstart="complete('down', item)" @touchend="complete('up', item)">
+          <ToButtonRipple @focused="compeleItem(item)">
+            <div class="f1 text">
               {{ item.text }}
             </div>
           </ToButtonRipple>
@@ -38,12 +38,10 @@ import ToContainer from '@/components/ToContainer.vue';
 import ToHeader from '@/components/ToHeader.vue';
 import ToInsert from '@/components/ToInsert/index.vue';
 import ToButtonRipple from '@/components/ToButtonRipple/index.vue';
-import { TypeStorage } from '../mock/index';
 import { InsetItem, InputItem } from '../interface/index';
 import { ToTouch } from '../touch/index';
 import { createIssue, getIssues } from '@/api';
 
-const storage = new TypeStorage<{ todoItems: [InsetItem?] }>();
 const date = new Date();
 @Options({
   components: { ToHeader, ToContainer, ToInsert, ToButtonRipple },
@@ -75,6 +73,9 @@ export default class Home extends Vue {
       this.onPrevent = true;
     }
   }
+  compeleItem(item: InputItem) {
+    console.log(item);
+  }
   insertItem(item: InputItem) {
     const [month, day] = item.date.split('/');
     const inputItem = {
@@ -91,16 +92,6 @@ export default class Home extends Vue {
       }
     });
     this.onInsert = false;
-  }
-  complete(status: 'up' | 'down', item: InsetItem) {
-    const timeStamp = new Date().getTime();
-    if (status === 'down') {
-      this.timeStamp = timeStamp;
-    }
-    if (status === 'up' && timeStamp - this.timeStamp > 1000) {
-      item.complete = true;
-      storage.updateItem('todoItems', this.todoItems);
-    }
   }
   mounted() {
     getIssues().then((res) => {

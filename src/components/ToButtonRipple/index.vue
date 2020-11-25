@@ -5,19 +5,19 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { ToTouch } from '@/touch';
+import { Options, Vue } from 'vue-class-component';
 
-export default class App extends Vue {
+@Options({
+  emits: ['focused'],
+})
+export default class ToButtonRipple extends Vue {
   buttonRef: HTMLElement | null = null;
+  refId = 0;
   mounted() {
-    if (this.buttonRef) {
-      this.buttonRef.ontouchstart = () => {
-        document.body.className = 'noTouch';
-      };
-      this.buttonRef.ontouchend = () => {
-        document.body.className = '';
-      };
-    }
+    ToTouch.continues(this.buttonRef, () => {
+      this.$emit('focused');
+    });
   }
 }
 </script>
@@ -37,7 +37,7 @@ export default class App extends Vue {
   border-radius: 100vw;
   background-color: #333;
   opacity: 0;
-  transform: scale(0);
+  transform: scale(0.1);
 }
 .content:active .shadow {
   opacity: 0.3;
