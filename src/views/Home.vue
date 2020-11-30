@@ -185,6 +185,12 @@ export default class Home extends Vue {
   margin-right: 30px;
   padding-left: 20px;
 }
+.items .item .text {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .item > span {
   margin-right: 10px;
 }
