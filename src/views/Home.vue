@@ -20,8 +20,12 @@
       <ul class="items">
         <li class="item df ac" v-for="(item, index) in todoItems" :key="index">
           <span>{{ index + 1 }}.</span>
-          <ToButtonRipple @focused="compeleItem(item)">
+          <ToButtonRipple @focused="completeItem(item)">
             <div class="f1 text">
+              <div class="complete-shadow" v-show="item.complete"></div>
+              <div class="complete-text" v-show="item.complete">
+                complete
+              </div>
               {{ item.text }}
             </div>
           </ToButtonRipple>
@@ -73,8 +77,8 @@ export default class Home extends Vue {
       this.onPrevent = true;
     }
   }
-  compeleItem(item: InputItem) {
-    console.log(item);
+  completeItem(item: InsetItem) {
+    item.complete = true;
   }
   insertItem(item: InputItem) {
     const [month, day] = item.date.split('/');
@@ -184,12 +188,34 @@ export default class Home extends Vue {
   margin-bottom: 12px;
   margin-right: 30px;
   padding-left: 20px;
+  position: relative;
 }
 .items .item .text {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.items .item .complete-text,
+.items .item .complete-shadow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: #999;
+  opacity: 0.9;
+}
+.items .item .complete-text {
+  opacity: 1;
+  color: #333;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  justify-content: flex-end;
+  padding-right: 30px;
+  box-sizing: border-box;
 }
 .item > span {
   margin-right: 10px;
