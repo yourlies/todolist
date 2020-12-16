@@ -1,6 +1,6 @@
 <template>
   <ToContainer class="container full-screen" @click="onclick">
-    <ToHeader />
+    <ToHeader></ToHeader>
     <div class="home">
       <div class="comment">“双击新增计划，左右滑动切换任务类型”</div>
       <div class="comment">“拖动计划，可重新分组”</div>
@@ -20,21 +20,18 @@
       <ul class="items">
         <li class="item df ac" v-for="(item, index) in todoItems" :key="index">
           <span>{{ index + 1 }}.</span>
-          <ToButtonRipple @focused="completeItem(item)">
+          <ToButtonRipple :active="123123" @focused="completeItem(item)">
             <div class="f1 text">
               <div class="complete-shadow" v-show="item.complete"></div>
-              <div class="complete-text" v-show="item.complete">
-                complete
-              </div>
+              <div class="complete-text" v-show="item.complete">complete</div>
               {{ item.text }}
             </div>
           </ToButtonRipple>
         </li>
       </ul>
     </div>
-    <ToInsert @insert="insertItem" @close="closeLayer" v-if="onInsert" />
-  </ToContainer>
-</template>
+    <ToInsert @insert="insertItem" @close="closeLayer" v-if="onInsert"></ToInsert> </ToContainer
+></template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
@@ -79,6 +76,7 @@ export default class Home extends Vue {
   }
   completeItem(item: InsetItem) {
     item.complete = true;
+    console.log(123123);
   }
   insertItem(item: InputItem) {
     const [month, day] = item.date.split('/');

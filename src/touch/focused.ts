@@ -1,6 +1,6 @@
 let refId = 0
 
-export function continues(ref: HTMLElement | null, resolve: Function) {
+export function focused(ref: HTMLElement | null, resolve: Function) {
   if (!ref) {
     return false
   }

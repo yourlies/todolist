@@ -1,4 +1,4 @@
 import { double } from './click'
-import { continues } from './continues'
+import { focused } from './focused'
 
-export const ToTouch = { double, continues }
+export const ToTouch = { double, focused }

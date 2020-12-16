@@ -1,12 +1,12 @@
 <template>
   <div class="content to-button-ripple" ref="buttonRef">
     <slot></slot>
-    <div class="shadow"></div>
+    <div :class="['shadow', active ? 'active' : '']"></div>
   </div>
 </template>
 <script lang="ts">
 import { ToTouch } from '@/touch';
-import { Options, Vue } from 'vue-class-component';
+import { Options, Vue, prop } from 'vue-class-component';
 
 @Options({
   emits: ['focused'],
@@ -14,8 +14,11 @@ import { Options, Vue } from 'vue-class-component';
 export default class ToButtonRipple extends Vue {
   buttonRef: HTMLElement | null = null;
   refId = 0;
+  active = prop({
+    type: Boolean,
+  });
   mounted() {
-    ToTouch.continues(this.buttonRef, () => {
+    ToTouch.focused(this.buttonRef, () => {
       this.$emit('focused');
     });
   }
